@@ -1,0 +1,7 @@
+streamlit
+spacy
+pdfminer.six
+scikit-learn
+pandas
+numpy
+matplotlib
