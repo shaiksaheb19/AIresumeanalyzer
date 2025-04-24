@@ -33,3 +33,9 @@ if uploaded_file and job_desc:
     score = calculate_similarity(cleaned_resume, job_desc)
     st.subheader("Resume Match Score:")
     st.write(f"{score:.2f}%")
+if st.button("Analyze"):
+    if resume and job_desc:
+        score = get_similarity(resume, job_desc)
+        st.success(f"✅ Match Score: {score}%")
+    else:
+        st.warning("Please enter both resume and job description.")
