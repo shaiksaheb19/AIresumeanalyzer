@@ -1,15 +1,15 @@
 import streamlit as st
 import spacy
-import pdfminer
 from pdfminer.high_level import extract_text
-import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 nlp = spacy.load("en_core_web_sm")
 
 def extract_text_from_pdf(pdf_file):
-    return extract_text(pdf_file)
+    if pdf_file is not None:
+        return extract_text(pdf_file)
+    return ""
 
 def analyze_resume(text):
     doc = nlp(text)
@@ -25,18 +25,20 @@ def calculate_similarity(resume_text, jd_text):
 st.title("AI Resume Analyzer")
 
 uploaded_file = st.file_uploader("Upload your resume (PDF)", type=["pdf"])
-resume_text = extract_text_from_pdf(uploaded_file)
 job_desc = st.text_area("Paste the Job Description here")
 
-if uploaded_file and job_desc:
+if uploaded_file is not None and job_desc:
     resume_text = extract_text_from_pdf(uploaded_file)
     cleaned_resume = analyze_resume(resume_text)
     score = calculate_similarity(cleaned_resume, job_desc)
     st.subheader("Resume Match Score:")
     st.write(f"{score:.2f}%")
+
 if st.button("Analyze"):
-    if resume_text and job_desc:
-        score = get_similarity(resume_text, job_desc)
-        st.success(f"✅ Match Score: {score}%")
+    if uploaded_file is not None and job_desc:
+        resume_text = extract_text_from_pdf(uploaded_file)
+        cleaned_resume = analyze_resume(resume_text)
+        score = calculate_similarity(cleaned_resume, job_desc)
+        st.success(f"✅ Match Score: {score:.2f}%")
     else:
-        st.warning("Please enter both resume and job description.")
+        st.warning("Please upload a resume and enter a job description.")
