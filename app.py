@@ -25,6 +25,7 @@ def calculate_similarity(resume_text, jd_text):
 st.title("AI Resume Analyzer")
 
 uploaded_file = st.file_uploader("Upload your resume (PDF)", type=["pdf"])
+resume_text = extract_text_from_pdf(uploaded_file)
 job_desc = st.text_area("Paste the Job Description here")
 
 if uploaded_file and job_desc:
@@ -34,8 +35,8 @@ if uploaded_file and job_desc:
     st.subheader("Resume Match Score:")
     st.write(f"{score:.2f}%")
 if st.button("Analyze"):
-    if resume and job_desc:
-        score = get_similarity(resume, job_desc)
+    if resume_text and job_desc:
+        score = get_similarity(resume_text, job_desc)
         st.success(f"✅ Match Score: {score}%")
     else:
         st.warning("Please enter both resume and job description.")
